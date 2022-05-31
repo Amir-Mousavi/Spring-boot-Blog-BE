@@ -14,4 +14,6 @@ class CategoryService(val userService: UserService, val categoryRepository: Cate
         return categoryRepository.save(category)
     }
 
+    fun findById(id: Long) = categoryRepository.findById(id)
+
 }

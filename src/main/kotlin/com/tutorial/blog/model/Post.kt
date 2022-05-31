@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne
 
 @Entity
 data class Post(
-    @Id @GeneratedValue val id: Long,
+    @Id @GeneratedValue val id: Long?,
 
     val title: String,
     val content: String,
