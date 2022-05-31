@@ -19,10 +19,11 @@ class PostService(val categoryService: CategoryService, val userService: UserSer
 
     fun createPost(postDTO: PostDTO, idToken: String): PostDTO {
         val user = userService.getOrCreateUser(idToken)
+
         val category = categoryService.findById(postDTO.categoryId)
 
         if (!category.isPresent) {
-            throw java.lang.IllegalArgumentException("Category ID is not valid")
+            throw java.lang.IllegalArgumentException("CategoryId is not valid")
         }
 
         val newPost = Post(id = null, title = postDTO.title, content = postDTO.content, category = category.get(), user = user);
