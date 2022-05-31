@@ -4,6 +4,7 @@ import com.tutorial.blog.dto.PostDTO
 import com.tutorial.blog.model.Post
 import com.tutorial.blog.repositories.PostRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PostService(val categoryService: CategoryService, val userService: UserService, val postRepository: PostRepository) {
@@ -46,5 +47,12 @@ class PostService(val categoryService: CategoryService, val userService: UserSer
             title = postDTO.title,
             content = postDTO.content
         )))
+    }
+
+    @Transactional
+    fun delete(id: Long, idToken: String) {
+        val user = userService.getOrCreateUser(idToken)
+
+        postRepository.deleteByIdAndUser(id, user)
     }
 }
