@@ -24,4 +24,8 @@ class AuthFilter(val firebaseService: FirebaseService): OncePerRequestFilter() {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
         }
     }
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        return request.requestURI.contains("/api/health/")
+    }
 }
