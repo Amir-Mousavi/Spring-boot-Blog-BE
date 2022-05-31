@@ -7,8 +7,8 @@ import javax.persistence.ManyToOne
 
 @Entity
 data class Category(
-    @Id @GeneratedValue val id: Long,
+    @Id @GeneratedValue val id: Long?,
     val name: String,
 
-    @ManyToOne var user: User
+    @ManyToOne var user: User?
 )

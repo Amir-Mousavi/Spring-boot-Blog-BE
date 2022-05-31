@@ -5,11 +5,10 @@ import com.tutorial.blog.repositories.CategoryRepository
 import org.springframework.stereotype.Service
 
 @Service
-class CategoryService(val firebaseService: FirebaseService, val userService: UserService, val categoryRepository: CategoryRepository) {
+class CategoryService(val userService: UserService, val categoryRepository: CategoryRepository) {
 
     fun createCategory(category: Category, idToken: String): Category {
-        val firebaseToken = firebaseService.getFirebaseToken(idToken)
-        val user = userService.getOrCreateUser(firebaseToken!!.email)
+        val user = userService.getOrCreateUser(idToken)
 
         category.user = user
         return categoryRepository.save(category)

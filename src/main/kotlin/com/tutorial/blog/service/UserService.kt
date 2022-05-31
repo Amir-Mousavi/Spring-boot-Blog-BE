@@ -5,10 +5,14 @@ import com.tutorial.blog.repositories.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(val userRepository: UserRepository) {
+class UserService(val userRepository: UserRepository, val firebaseService: FirebaseService) {
     fun getUserByEmail(email:String) = userRepository.findByEmail(email)
 
-    fun getOrCreateUser(email:String): User {
+    fun getOrCreateUser(idToken: String): User {
+
+        val firebaseToken = firebaseService.getFirebaseToken(idToken)
+        val email = firebaseToken!!.email
+
         val user = getUserByEmail(email)
 
         if (user != null) {
