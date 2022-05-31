@@ -16,4 +16,17 @@ class CategoryService(val userService: UserService, val categoryRepository: Cate
 
     fun findById(id: Long) = categoryRepository.findById(id)
 
+    fun update(category: Category, idToken: String): Category {
+        val user = userService.getOrCreateUser(idToken)
+
+        val categoryDB = categoryRepository.findByIdAndUser(category.id!!, user)
+            ?: throw java.lang.IllegalArgumentException("Category does not exist")
+
+        val newCategory = categoryDB.copy(
+            name = category.name
+        )
+
+        return categoryRepository.save(newCategory)
+    }
+
 }

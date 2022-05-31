@@ -5,6 +5,7 @@ import com.tutorial.blog.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,5 +19,11 @@ class PostController(val postService: PostService) {
     fun create(@RequestBody postDTO: PostDTO, @RequestHeader("Authorization") idToken: String) = ResponseEntity(
         postService.createPost(postDTO, idToken),
         HttpStatus.CREATED
+    )
+
+    @PutMapping
+    fun update(@RequestBody postDTO: PostDTO, @RequestHeader("Authorization") idToken: String ) = ResponseEntity(
+        postService.updatePost(postDTO, idToken),
+        HttpStatus.OK
     )
 }

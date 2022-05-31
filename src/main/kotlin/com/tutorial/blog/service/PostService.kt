@@ -31,4 +31,20 @@ class PostService(val categoryService: CategoryService, val userService: UserSer
 
         return convertPostToPostDTO(postRepository.save(newPost))
     }
+
+    fun updatePost(postDTO: PostDTO, idToken: String): PostDTO {
+        val user = userService.getOrCreateUser(idToken)
+
+        if (postDTO.id == null) {
+            throw java.lang.IllegalArgumentException("Post id is null")
+        }
+
+        val postDB = postRepository.findByIdAndUser(postDTO.id, user)
+            ?: throw java.lang.IllegalArgumentException("Post does not exist")
+
+        return convertPostToPostDTO(postRepository.save(postDB.copy(
+            title = postDTO.title,
+            content = postDTO.content
+        )))
+    }
 }
