@@ -10,5 +10,5 @@ data class Category(
     @Id @GeneratedValue val id: Long,
     val name: String,
 
-    @ManyToOne val user: User
+    @ManyToOne var user: User
 )

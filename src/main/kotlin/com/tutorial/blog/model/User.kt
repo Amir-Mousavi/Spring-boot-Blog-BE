@@ -6,6 +6,6 @@ import javax.persistence.Id
 
 @Entity
 data class User(
-    @Id @GeneratedValue val id: Long,
+    @Id @GeneratedValue val id: Long?,
     val email: String
 )
