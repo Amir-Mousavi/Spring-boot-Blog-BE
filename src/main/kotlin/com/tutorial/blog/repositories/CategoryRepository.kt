@@ -8,4 +8,6 @@ interface CategoryRepository: CrudRepository<Category, Long> {
     fun findAllByUser(user: User): List<Category>
 
     fun findByIdAndUser(id: Long, user: User): Category?
+
+    fun deleteByIdAndUser(id: Long, user: User)
 }

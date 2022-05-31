@@ -4,6 +4,8 @@ import com.tutorial.blog.model.Category
 import com.tutorial.blog.service.CategoryService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -26,4 +28,11 @@ class CategoryController(val categoryService: CategoryService) {
         categoryService.update(category, idToken),
         HttpStatus.OK
     )
+
+    @DeleteMapping("{id}")
+    fun delete(@PathVariable("id") id: Long, @RequestHeader("Authorization") idToken: String) : ResponseEntity<Unit> {
+        categoryService.delete(id, idToken)
+
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
 }

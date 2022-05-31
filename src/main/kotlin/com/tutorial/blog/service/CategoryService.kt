@@ -3,6 +3,7 @@ package com.tutorial.blog.service
 import com.tutorial.blog.model.Category
 import com.tutorial.blog.repositories.CategoryRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CategoryService(val userService: UserService, val categoryRepository: CategoryRepository) {
@@ -27,6 +28,13 @@ class CategoryService(val userService: UserService, val categoryRepository: Cate
         )
 
         return categoryRepository.save(newCategory)
+    }
+
+    @Transactional
+    fun delete(id: Long, idToken: String) {
+        val user = userService.getOrCreateUser(idToken)
+
+        categoryRepository.deleteByIdAndUser(id, user)
     }
 
 }
