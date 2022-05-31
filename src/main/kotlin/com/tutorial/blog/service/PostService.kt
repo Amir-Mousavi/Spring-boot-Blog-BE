@@ -8,7 +8,16 @@ import org.springframework.stereotype.Service
 @Service
 class PostService(val categoryService: CategoryService, val userService: UserService, val postRepository: PostRepository) {
 
-    fun createPost(postDTO: PostDTO, idToken: String): Post {
+    fun convertPostToPostDTO(post: Post): PostDTO {
+        return PostDTO(
+            id = post.id,
+            title = post.title,
+            content = post.content,
+            categoryId = post.category.id!!
+        )
+    }
+
+    fun createPost(postDTO: PostDTO, idToken: String): PostDTO {
         val user = userService.getOrCreateUser(idToken)
         val category = categoryService.findById(postDTO.categoryId)
 
@@ -19,6 +28,6 @@ class PostService(val categoryService: CategoryService, val userService: UserSer
         val newPost = Post(id = null, title = postDTO.title, content = postDTO.content, category = category.get(), user = user);
 
 
-        return postRepository.save(newPost)
+        return convertPostToPostDTO(postRepository.save(newPost))
     }
 }
