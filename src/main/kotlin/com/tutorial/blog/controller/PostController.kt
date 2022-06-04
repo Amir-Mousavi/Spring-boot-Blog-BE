@@ -10,6 +10,23 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/post/")
 class PostController(val postService: PostService) {
 
+    @GetMapping
+    fun findAll(@RequestHeader("Authorization") idToken: String) = ResponseEntity(
+        postService.findAll(idToken),
+        HttpStatus.OK
+    )
+
+    @GetMapping("{id}")
+    fun findById(@RequestHeader("Authorization") idToken: String, @PathVariable("id") id: Long): ResponseEntity<Any> {
+        val post = postService.findById(idToken, id)
+
+        return if (post != null) {
+            ResponseEntity(post, HttpStatus.OK)
+        } else {
+            ResponseEntity("Post id: $id does not exist", HttpStatus.BAD_REQUEST)
+        }
+    }
+
     @PostMapping
     fun create(@RequestBody postDTO: PostDTO, @RequestHeader("Authorization") idToken: String) = ResponseEntity(
         postService.createPost(postDTO, idToken),

@@ -18,6 +18,19 @@ class PostService(val categoryService: CategoryService, val userService: UserSer
         )
     }
 
+    fun findAll(idToken: String) = postRepository
+        .findAllByUser(userService.getOrCreateUser(idToken))
+        .map { convertPostToPostDTO(it) }
+
+    fun findById(idToken: String, id: Long) = postRepository
+        .findByIdAndUser(id,userService.getOrCreateUser(idToken)).let {
+             if (it != null) {
+                convertPostToPostDTO(it)
+            } else {
+                null
+            }
+        }
+
     fun createPost(postDTO: PostDTO, idToken: String): PostDTO {
         val user = userService.getOrCreateUser(idToken)
 
@@ -27,7 +40,7 @@ class PostService(val categoryService: CategoryService, val userService: UserSer
             throw java.lang.IllegalArgumentException("CategoryId is not valid")
         }
 
-        val newPost = Post(id = null, title = postDTO.title, content = postDTO.content, category = category.get(), user = user);
+        val newPost = Post(id = null, title = postDTO.title, content = postDTO.content, category = category.get(), user = user)
 
 
         return convertPostToPostDTO(postRepository.save(newPost))
