@@ -9,11 +9,20 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CategoryService(val userService: UserService, val categoryRepository: CategoryRepository) {
 
-    fun getAll(idToken: String): List<CategoryDTO> {
-        val user = userService.getOrCreateUser(idToken)
+    fun findAll(idToken: String): List<CategoryDTO> {
         return categoryRepository
-            .findAllByUser(user)
+            .findAllByUser(userService.getOrCreateUser(idToken))
             .map { CategoryDTO(id = it.id!!, name = it.name, numberOfPosts = it.posts?.size ?: 0) }
+    }
+
+    fun findById(idToken: String, id: Long): CategoryDTO? {
+        val category = categoryRepository.findByIdAndUser(id, userService.getOrCreateUser(idToken))
+
+        return if (category == null) {
+            null
+        } else {
+            CategoryDTO(id = category.id!!, name = category.name, numberOfPosts = category.posts?.size ?: 0)
+        }
     }
 
     fun createCategory(category: Category, idToken: String): Category {

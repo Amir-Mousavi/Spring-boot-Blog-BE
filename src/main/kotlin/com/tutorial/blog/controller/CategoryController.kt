@@ -18,9 +18,19 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/category/")
 class CategoryController(val categoryService: CategoryService) {
 
+    @GetMapping("{id}")
+    fun findById(@PathVariable("id") id: Long,@RequestHeader("Authorization") idToken: String ): ResponseEntity<Any> {
+        val category = categoryService.findById(id = id, idToken = idToken)
+        return if (category != null) {
+            ResponseEntity(category, HttpStatus.OK)
+        } else {
+            ResponseEntity("Category Id = $id does not exist", HttpStatus.BAD_REQUEST)
+        }
+    }
+
     @GetMapping
     fun findAll(@RequestHeader("Authorization") idToken: String) = ResponseEntity(
-        categoryService.getAll(idToken),
+        categoryService.findAll(idToken),
         HttpStatus.OK
     )
 
