@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseToken
 import org.springframework.stereotype.Service
 import java.io.FileInputStream
@@ -24,6 +25,10 @@ class FirebaseService {
             return null
         }
 
-        return FirebaseAuth.getInstance().verifyIdToken(idToken)
+        return try {
+            FirebaseAuth.getInstance().verifyIdToken(idToken)
+        }catch (ex: FirebaseAuthException) {
+            null
+        }
     }
 }
