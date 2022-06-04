@@ -1,5 +1,6 @@
 package com.tutorial.blog.service
 
+import com.tutorial.blog.dto.CategoryDTO
 import com.tutorial.blog.model.Category
 import com.tutorial.blog.repositories.CategoryRepository
 import org.springframework.stereotype.Service
@@ -7,6 +8,13 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CategoryService(val userService: UserService, val categoryRepository: CategoryRepository) {
+
+    fun getAll(idToken: String): List<CategoryDTO> {
+        val user = userService.getOrCreateUser(idToken)
+        return categoryRepository
+            .findAllByUser(user)
+            .map { CategoryDTO(id = it.id!!, name = it.name, numberOfPosts = it.posts?.size ?: 0) }
+    }
 
     fun createCategory(category: Category, idToken: String): Category {
         val user = userService.getOrCreateUser(idToken)
